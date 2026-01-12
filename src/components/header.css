@@ -1,0 +1,35 @@
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.site-brand {
+  font-weight: 700;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.client-login {
+  font-size: 0.95rem;
+  color: inherit;
+  opacity: 0.85;
+}
+
+.client-login:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.linklike {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: underline;
+}

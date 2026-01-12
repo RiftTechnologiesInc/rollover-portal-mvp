@@ -1,0 +1,80 @@
+.page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.hero {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  padding: 3rem 1rem;
+}
+
+.hero-title {
+  margin: 0;
+}
+
+.hero-sub {
+  margin: 0;
+  color: rgba(255,255,255,0.85);
+}
+
+.primary {
+  background: #646cff;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+}
+
+.value-prop {
+  padding: 1.5rem 0;
+  text-align: center;
+  color: rgba(255,255,255,0.8);
+}
+
+.placeholder {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.auth-wrap {
+    display: grid;
+    place-items: center;
+    padding: 3rem 1rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.auth-label {
+  display: grid;
+  gap: 0.35rem;
+  text-align: left;
+}
+
+.auth-input {
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: inherit;
+}
+
+.auth-error {
+  margin: 0;
+  color: #ff6b6b;
+  text-align: left;
+}
