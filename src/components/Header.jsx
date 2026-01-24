@@ -37,7 +37,7 @@ export default function Header() {
     <header className="header">
       <div className="header-left">
         <Link to="/" className="brand">
-          Rollover Portal
+          Rift
         </Link>
       </div>
 
@@ -47,9 +47,14 @@ export default function Header() {
             Logout
           </button>
         ) : (
-          <Link to="/login" className="login-link">
-            Client Login
-          </Link>
+          <div className="login-buttons">
+            <Link to="/login/investor" className="login-link investor-login">
+              Individual Investor
+            </Link>
+            <Link to="/login/advisor" className="login-link advisor-login">
+              Financial Professional
+            </Link>
+          </div>
         )}
       </div>
     </header>

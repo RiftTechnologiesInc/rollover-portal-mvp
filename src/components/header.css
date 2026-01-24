@@ -1,35 +1,106 @@
-.site-header {
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(21, 21, 21, 0.3);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-.site-brand {
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.brand {
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
+  font-size: 2.5rem;
+  color: #ffffff;
+  transition: color 0.3s ease;
+  letter-spacing: 0.02em;
 }
 
-.site-nav {
+.brand:hover {
+  color: #8a9482;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.login-buttons {
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
-.client-login {
+.login-link {
   font-size: 0.95rem;
-  color: inherit;
-  opacity: 0.85;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
-.client-login:hover {
-  opacity: 1;
-  text-decoration: underline;
+.investor-login {
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.investor-login:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.advisor-login {
+  color: #ffffff;
+  background: #8a9482;
+  border: 1px solid #8a9482;
+}
+
+.advisor-login:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
 }
 
 .linklike {
   background: none;
   border: none;
-  padding: 0;
+  padding: 0.6rem 1.25rem;
   cursor: pointer;
-  color: inherit;
-  text-decoration: underline;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.linklike:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 640px) {
+  .header {
+    padding: 1rem;
+  }
+
+  .login-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .login-link {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
 }

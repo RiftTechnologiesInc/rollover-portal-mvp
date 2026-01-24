@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
+import InvestorLogin from './pages/InvestorLogin'
+import AdvisorLogin from './pages/AdvisorLogin'
 import AppHome from './pages/AppHome'
 import ClientHome from './pages/ClientHome'
 import ClientOnboarding from './pages/ClientOnboarding'
@@ -12,6 +14,8 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/login/investor" element={<InvestorLogin />} />
+      <Route path="/login/advisor" element={<AdvisorLogin />} />
 
       <Route
         path="/app"
