@@ -4,6 +4,8 @@ import Login from './pages/Login'
 import InvestorLogin from './pages/InvestorLogin'
 import AdvisorLogin from './pages/AdvisorLogin'
 import AppHome from './pages/AppHome'
+import InviteClient from './pages/InviteClient'
+import Settings from './pages/Settings'
 import ClientHome from './pages/ClientHome'
 import ClientOnboarding from './pages/ClientOnboarding'
 import RequireAuth from './components/RequireAuth'
@@ -22,6 +24,24 @@ export default function App() {
         element={
           <RequireAuth>
             <AppHome />
+          </RequireAuth>
+        }
+      />
+
+      <Route
+        path="/app/invite"
+        element={
+          <RequireAuth>
+            <InviteClient />
+          </RequireAuth>
+        }
+      />
+
+      <Route
+        path="/app/settings"
+        element={
+          <RequireAuth>
+            <Settings />
           </RequireAuth>
         }
       />
