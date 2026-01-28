@@ -6,7 +6,7 @@
 }
 
 .landing-page {
-  background: #151515;
+  background: #1F2421;
   background-image:
     radial-gradient(circle at 10% 20%, rgba(138, 148, 130, 0.15) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(138, 148, 130, 0.1) 0%, transparent 40%),
@@ -109,7 +109,7 @@
 }
 
 .login-page {
-  background: #151515;
+  background: #1F2421;
 }
 
 .auth-wrap {
@@ -188,7 +188,7 @@
 
 /* App Pages */
 .app-page {
-  background: #151515;
+  background: #1F2421;
   min-height: 100vh;
 }
 
@@ -202,6 +202,30 @@
   display: flex;
   flex-direction: column;
   gap: 3rem;
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.invite-button-small {
+  background: linear-gradient(135deg, #8a9482 0%, #7a8472 100%);
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.invite-button-small:hover {
+  background: linear-gradient(135deg, #9aa492 0%, #8a9482 100%);
 }
 
 .app-welcome h1 {
@@ -376,6 +400,167 @@
   font-size: 0.95rem;
 }
 
+.invite-info {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(138, 148, 130, 0.05);
+  border: 1px solid rgba(138, 148, 130, 0.2);
+  border-radius: 10px;
+}
+
+.info-text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Share Client UI */
+.client-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.client-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(138, 148, 130, 0.3);
+}
+
+.client-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.client-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.client-email {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.client-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.share-button {
+  background: rgba(138, 148, 130, 0.1);
+  border: 1px solid rgba(138, 148, 130, 0.3);
+  color: #8a9482;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.share-button:hover {
+  background: rgba(138, 148, 130, 0.15);
+  border-color: rgba(138, 148, 130, 0.4);
+}
+
+.share-dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 0.5rem;
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-item {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+}
+
+.dropdown-item:hover {
+  background: rgba(138, 148, 130, 0.15);
+}
+
+.dropdown-empty {
+  padding: 1rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+
+.shared-with-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shared-with-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.shared-advisor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.shared-advisor-name {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.revoke-button {
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  transition: opacity 0.3s ease;
+}
+
+.revoke-button:hover {
+  opacity: 0.7;
+}
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .clients-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Settings Page */
 .settings-card {
   background: rgba(255, 255, 255, 0.03);
@@ -383,6 +568,9 @@
   border-radius: 16px;
   padding: 2.5rem;
   max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
 }
 
 .settings-section {
@@ -396,6 +584,56 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.9);
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.account-type-badge {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  background: rgba(138, 148, 130, 0.15);
+  border: 1px solid rgba(138, 148, 130, 0.3);
+  border-radius: 20px;
+  color: #8a9482;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.profile-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.profile-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.profile-value {
+  margin: 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.loading-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
 }
 
 .secondary-button {
@@ -414,6 +652,171 @@
 .secondary-button:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.3);
+}
+
+.settings-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.logout-button {
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.logout-button:hover {
+  background: rgba(255, 107, 107, 0.15);
+  border-color: rgba(255, 107, 107, 0.4);
+}
+
+/* Dashboard */
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dashboard-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.25rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.filter-btn.active {
+  background: #8a9482;
+  color: #ffffff;
+}
+
+.dashboard-loading {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dashboard-empty {
+  text-align: center;
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+.dashboard-empty p {
+  margin: 0 0 1.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.05rem;
+}
+
+.dashboard-table {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.invites-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.invites-table thead {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.invites-table th {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.invites-table td {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+}
+
+.invites-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.invites-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-completed {
+  background: rgba(138, 148, 130, 0.15);
+  color: #8a9482;
+  border: 1px solid rgba(138, 148, 130, 0.3);
+}
+
+.status-pending-setup {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.status-pending-invitation {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 @media (max-width: 768px) {
@@ -457,6 +860,14 @@
     grid-template-columns: 1fr;
   }
 
+  .right-section {
+    align-items: stretch;
+  }
+
+  .invite-button-small {
+    width: 100%;
+  }
+
   .invite-form-card,
   .settings-card {
     padding: 1.5rem;
@@ -464,5 +875,46 @@
 
   .page-header h1 {
     font-size: 2rem;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .profile-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-buttons {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .filter-btn {
+    flex: 1;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .dashboard-table {
+    overflow-x: auto;
+  }
+
+  .invites-table th,
+  .invites-table td {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.7rem;
   }
 }

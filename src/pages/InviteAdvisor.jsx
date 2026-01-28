@@ -4,16 +4,17 @@ import Header from '../components/Header'
 import { supabase } from '../lib/supabaseClient'
 import './pages.css'
 
-export default function InviteClient() {
+export default function InviteAdvisor() {
   const navigate = useNavigate()
 
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
+  const [firmName, setFirmName] = useState('')
   const [status, setStatus] = useState('')
   const [inviting, setInviting] = useState(false)
 
-  async function handleInviteClient(e) {
+  async function handleInviteAdvisor(e) {
     e.preventDefault()
     setStatus('')
     setInviting(true)
@@ -26,40 +27,47 @@ export default function InviteClient() {
         throw new Error('Supabase environment variables are missing')
       }
 
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
+      const { data: sessionData } = await supabase.auth.getSession()
       const accessToken = sessionData?.session?.access_token
 
-      if (sessionError || !accessToken) {
-        throw new Error('You must be logged in to invite clients')
+      const headers = {
+        'Content-Type': 'application/json',
+        apikey: supabaseAnonKey
       }
 
-      const response = await fetch(`${supabaseUrl}/functions/v1/invite-client`, {
+      if (accessToken) {
+        headers.Authorization = `Bearer ${accessToken}`
+      }
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/invite-advisor`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          apikey: supabaseAnonKey,
-          Authorization: `Bearer ${accessToken}`
-        },
+        headers,
         body: JSON.stringify({
           email,
           firstName,
-          lastName
+          lastName,
+          firmName
         })
       })
 
       const result = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        throw new Error(result.error || result.message || 'Failed to invite client')
+        throw new Error(result.error || result.message || 'Failed to invite advisor')
       }
 
       if (result.success) {
-        setStatus(`Success! Invite sent to ${email}. The client will receive an email to set their password.`)
+        setStatus(
+          `Success! Invite sent to ${email}. ` +
+          `They will be a ${result.role} at ${firmName}. ` +
+          `They'll receive an email to set their password.`
+        )
         setEmail('')
         setFirstName('')
         setLastName('')
+        setFirmName('')
       } else {
-        setStatus(`Error: ${result.message || 'Failed to invite client'}`)
+        setStatus(`Error: ${result.message || 'Failed to invite advisor'}`)
       }
     } catch (error) {
       console.error('Invite error:', error)
@@ -79,19 +87,32 @@ export default function InviteClient() {
             <button className="back-button" onClick={() => navigate('/app')}>
               ← Back
             </button>
-            <h1>Invite a Client</h1>
-            <p className="page-subtitle">Send an invitation to your client to join the rollover portal</p>
+            <h1>Invite Financial Advisor</h1>
+            <p className="page-subtitle">
+              Send an invitation to a financial advisor. The first advisor in a firm becomes the owner.
+            </p>
           </div>
 
           <div className="invite-form-card">
-            <form onSubmit={handleInviteClient} className="invite-form">
+            <form onSubmit={handleInviteAdvisor} className="invite-form">
+              <label className="form-label">
+                Firm Name
+                <input
+                  className="form-input"
+                  value={firmName}
+                  onChange={(e) => setFirmName(e.target.value)}
+                  placeholder="Acme Financial Group"
+                  required
+                />
+              </label>
+
               <label className="form-label">
                 First Name
                 <input
                   className="form-input"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="Jane"
+                  placeholder="John"
                   required
                 />
               </label>
@@ -115,7 +136,7 @@ export default function InviteClient() {
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   required
-                  placeholder="jane.smith@example.com"
+                  placeholder="john.smith@acmefinancial.com"
                 />
               </label>
 
@@ -132,8 +153,8 @@ export default function InviteClient() {
 
             <div className="invite-info">
               <p className="info-text">
-                <strong>Note:</strong> The client will be automatically added to your firm and you'll have access to their account.
-                You can share access with other advisors in your firm after they accept the invite.
+                <strong>Note:</strong> The first user invited to a firm will become the firm owner.
+                Subsequent users will be advisors. Advisors can invite clients and share client access with other advisors in their firm.
               </p>
             </div>
           </div>

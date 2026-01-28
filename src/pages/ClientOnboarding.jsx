@@ -44,19 +44,31 @@ export default function ClientOnboarding() {
 
         // If row doesn't exist, insert a minimal profile
         if (!existing) {
+          const firstName = user.user_metadata?.first_name || ''
+          const lastName = user.user_metadata?.last_name || ''
           const { error: insertErr } = await supabase.from('profiles').insert({
             id: user.id,
-            role: 'client',
-            firm_name: '', // can fill later if you want
+            first_name: firstName,
+            last_name: lastName
           })
           if (insertErr) throw insertErr
         } else if (existingErr) {
           throw existingErr
         }
 
+        // 4) Route based on firm role
+        const { data: firmInfo, error: firmError } = await supabase.rpc('get_user_firm')
+        if (firmError || !firmInfo?.role) {
+          throw new Error('Your account is not assigned to a firm yet. Ask an admin to invite you.')
+        }
+
         if (!mounted) return
         setStatus('Done! Redirecting…')
-        navigate('/client', { replace: true })
+        if (firmInfo.role === 'client') {
+          navigate('/client', { replace: true })
+        } else {
+          navigate('/app', { replace: true })
+        }
       } catch (e) {
         if (!mounted) return
         setError(e?.message || 'Onboarding failed')

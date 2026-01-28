@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
 export default function RequireAuth({ children }) {
+  const location = useLocation()
   const [loading, setLoading] = useState(true)
   const [hasSession, setHasSession] = useState(false)
 
@@ -30,7 +31,18 @@ export default function RequireAuth({ children }) {
   }, [])
 
   if (loading) return null
-  if (!hasSession) return <Navigate to="/login" replace />
+  if (!hasSession) {
+    const path = location.pathname || ''
+    let loginPath = '/login'
+
+    if (path.startsWith('/admin') || path.startsWith('/app')) {
+      loginPath = '/login/advisor'
+    } else if (path.startsWith('/client')) {
+      loginPath = '/login/investor'
+    }
+
+    return <Navigate to={loginPath} replace />
+  }
 
   return children
 }

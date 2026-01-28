@@ -42,25 +42,23 @@ export default function Login() {
 
     const user = sessionData.session.user
 
-    // 3) Load profile role
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
+    // 3) Load firm role
+    const { data: firmInfo, error: firmError } = await supabase.rpc('get_user_firm')
 
     setLoading(false)
 
-    if (profileError || !profile) {
-      setError('Failed to load user profile')
+    if (firmError || !firmInfo) {
+      setError('Failed to load user role')
       return
     }
 
     // 4) Route by role
-    if (profile.role === 'client') {
+    if (firmInfo.role === 'client') {
       navigate('/client')
-    } else {
+    } else if (firmInfo.role === 'advisor' || firmInfo.role === 'owner') {
       navigate('/app')
+    } else {
+      setError('Unknown user role')
     }
   }
 
@@ -70,7 +68,7 @@ export default function Login() {
 
       <main className="auth-wrap">
         <div className="auth-card">
-          <h1>Client Login</h1>
+          <h1>Member Login</h1>
 
           <form onSubmit={handleSubmit} className="auth-form">
             <label className="auth-label">

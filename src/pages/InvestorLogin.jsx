@@ -42,21 +42,18 @@ export default function InvestorLogin() {
 
     const user = sessionData.session.user
 
-    // 3) Load profile role
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
+    // 3) Get user's firm and role from firm_memberships
+    const { data: firmInfo, error: firmError } = await supabase.rpc('get_user_firm')
 
-    if (profileError || !profile) {
+    if (firmError || !firmInfo) {
+      await supabase.auth.signOut()
       setLoading(false)
-      setError('Failed to load user profile')
+      setError('Failed to load user profile. Please contact support.')
       return
     }
 
     // 4) Route by role - for investor login, expect 'client' role
-    if (profile.role === 'client') {
+    if (firmInfo.role === 'client') {
       setLoading(false)
       navigate('/client')
     } else {

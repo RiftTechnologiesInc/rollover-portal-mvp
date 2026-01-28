@@ -5,6 +5,7 @@ import InvestorLogin from './pages/InvestorLogin'
 import AdvisorLogin from './pages/AdvisorLogin'
 import AppHome from './pages/AppHome'
 import InviteClient from './pages/InviteClient'
+import InviteAdvisor from './pages/InviteAdvisor'
 import Settings from './pages/Settings'
 import ClientHome from './pages/ClientHome'
 import ClientOnboarding from './pages/ClientOnboarding'
@@ -55,7 +56,26 @@ export default function App() {
         }
       />
 
+      <Route
+        path="/client/settings"
+        element={
+          <RequireAuth>
+            <Settings />
+          </RequireAuth>
+        }
+      />
+
       <Route path="/client/onboarding" element={<ClientOnboarding />} />
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin/invite-advisor"
+        element={
+          <RequireAuth>
+            <InviteAdvisor />
+          </RequireAuth>
+        }
+      />
     </Routes>
   )
 }
