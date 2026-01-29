@@ -7,10 +7,7 @@ import './pages.css'
 export default function AppHome() {
   const navigate = useNavigate()
   const [clients, setClients] = useState([])
-  const [advisors, setAdvisors] = useState([])
   const [loading, setLoading] = useState(true)
-  const [currentUserId, setCurrentUserId] = useState(null)
-  const [openShareDropdown, setOpenShareDropdown] = useState(null)
 
   useEffect(() => {
     loadData()
@@ -29,8 +26,6 @@ export default function AppHome() {
         setLoading(false)
         return
       }
-
-      setCurrentUserId(userId)
 
       // Get user's firm info
       const { data: firmInfo } = await supabase.rpc('get_user_firm')
@@ -58,27 +53,22 @@ export default function AppHome() {
         console.error('Error loading clients:', clientError)
       }
 
-      // For each client, get their email and all advisors who have access
+      // For each client, check if they have completed account setup
       if (clientAccessData) {
         const enrichedClients = await Promise.all(
           clientAccessData.map(async (access) => {
             const clientId = access.client_id
             const profile = access.profiles
 
-            // Get all advisors who have access to this client
-            const { data: sharedWith } = await supabase
-              .from('client_access')
-              .select(`
-                advisor_id,
-                granted_by,
-                created_at,
-                profiles!client_access_advisor_profile_fkey (
-                  first_name,
-                  last_name
-                )
-              `)
-              .eq('client_id', clientId)
-              .neq('advisor_id', userId) // Exclude current user
+            // Check if client has completed setup by looking in firm_memberships
+            const { data: membershipData } = await supabase
+              .from('firm_memberships')
+              .select('role')
+              .eq('user_id', clientId)
+              .eq('role', 'client')
+              .single()
+
+            const hasCompletedSetup = !!membershipData
 
             return {
               id: clientId,
@@ -86,7 +76,7 @@ export default function AppHome() {
               lastName: profile?.last_name || 'N/A',
               email: 'N/A',
               addedAt: access.created_at,
-              sharedWith: sharedWith || []
+              hasCompletedSetup: hasCompletedSetup
             }
           })
         )
@@ -132,26 +122,6 @@ export default function AppHome() {
           setClients(enrichedClients)
         }
       }
-
-      // Load other advisors in the firm (for share dropdown)
-      const { data: firmAdvisors, error: advisorError } = await supabase
-        .from('firm_memberships')
-        .select(`
-          user_id,
-          profiles!firm_memberships_user_profile_fkey (
-            first_name,
-            last_name
-          )
-        `)
-        .eq('firm_id', firmInfo.firm_id)
-        .in('role', ['advisor', 'owner'])
-        .neq('user_id', userId)
-
-      if (advisorError) {
-        console.error('Error loading advisors:', advisorError)
-      } else {
-        setAdvisors(firmAdvisors || [])
-      }
     } catch (error) {
       console.error('Error loading data:', error)
     } finally {
@@ -159,52 +129,6 @@ export default function AppHome() {
     }
   }
 
-  async function handleShareClient(clientId, advisorId) {
-    try {
-      const { error } = await supabase.rpc('share_client', {
-        p_client_id: clientId,
-        p_advisor_id: advisorId
-      })
-
-      if (error) {
-        alert(`Error sharing client: ${error.message}`)
-      } else {
-        // Reload data to show updated sharing
-        await loadData()
-        setOpenShareDropdown(null)
-      }
-    } catch (error) {
-      alert(`Error: ${error.message}`)
-    }
-  }
-
-  async function handleRevokeAccess(clientId, advisorId) {
-    if (!confirm('Are you sure you want to revoke this advisor\'s access to this client?')) {
-      return
-    }
-
-    try {
-      const { error } = await supabase.rpc('revoke_client_access', {
-        p_client_id: clientId,
-        p_advisor_id: advisorId
-      })
-
-      if (error) {
-        alert(`Error revoking access: ${error.message}`)
-      } else {
-        // Reload data
-        await loadData()
-      }
-    } catch (error) {
-      alert(`Error: ${error.message}`)
-    }
-  }
-
-  function getAvailableAdvisorsForClient(client) {
-    // Get advisors who don't already have access to this client
-    const sharedAdvisorIds = client.sharedWith.map(s => s.advisor_id)
-    return advisors.filter(a => !sharedAdvisorIds.includes(a.user_id))
-  }
 
   return (
     <div className="page app-page">
@@ -218,93 +142,42 @@ export default function AppHome() {
           </div>
 
           <div className="right-section">
-            <button className="invite-button-small" onClick={() => navigate('/app/invite')}>
-              + Invite a Client
-            </button>
+            <div className="client-management-container">
+              <button className="invite-button" onClick={() => navigate('/app/invite')}>
+                + Invite a Client
+              </button>
 
-            <div className="dashboard-section">
-              <div className="dashboard-header">
-                <h2>My Clients</h2>
-              </div>
+              <div className="clients-list-section">
+                <h2>Invited Clients</h2>
 
-              {loading ? (
-                <div className="dashboard-loading">Loading clients...</div>
-              ) : clients.length === 0 ? (
-                <div className="dashboard-empty">
-                  <p>No clients yet.</p>
-                  <button className="primary" onClick={() => navigate('/app/invite')}>
-                    Invite Your First Client
-                  </button>
-                </div>
-              ) : (
-                <div className="clients-grid">
-                  {clients.map((client) => {
-                    const availableAdvisors = getAvailableAdvisorsForClient(client)
-                    const isDropdownOpen = openShareDropdown === client.id
-
-                    return (
-                      <div key={client.id} className="client-card">
-                        <div className="client-card-header">
-                          <div>
-                            <div className="client-name">
-                              {client.firstName} {client.lastName}
-                            </div>
-                            <div className="client-email">{client.email}</div>
+                {loading ? (
+                  <div className="clients-loading">Loading clients...</div>
+                ) : clients.length === 0 ? (
+                  <div className="clients-empty">
+                    <p>No clients invited yet.</p>
+                  </div>
+                ) : (
+                  <div className="clients-list">
+                    {clients.map((client) => (
+                      <div key={client.id} className="client-item">
+                        <div className="client-info">
+                          <div className="client-name">
+                            {client.firstName} {client.lastName}
                           </div>
-                          <div className="client-actions">
-                            <div className="share-dropdown">
-                              <button
-                                className="share-button"
-                                onClick={() => setOpenShareDropdown(isDropdownOpen ? null : client.id)}
-                              >
-                                Share
-                              </button>
-                              {isDropdownOpen && (
-                                <div className="dropdown-content">
-                                  {availableAdvisors.length === 0 ? (
-                                    <div className="dropdown-empty">
-                                      All advisors have access
-                                    </div>
-                                  ) : (
-                                    availableAdvisors.map((advisor) => (
-                                      <div
-                                        key={advisor.user_id}
-                                        className="dropdown-item"
-                                        onClick={() => handleShareClient(client.id, advisor.user_id)}
-                                      >
-                                        {advisor.profiles?.first_name} {advisor.profiles?.last_name}
-                                      </div>
-                                    ))
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          </div>
+                          <div className="client-email">{client.email}</div>
                         </div>
-
-                        {client.sharedWith.length > 0 && (
-                          <div className="shared-with-section">
-                            <div className="shared-with-title">Shared with</div>
-                            {client.sharedWith.map((share) => (
-                              <div key={share.advisor_id} className="shared-advisor">
-                                <span className="shared-advisor-name">
-                                  {share.profiles?.first_name} {share.profiles?.last_name}
-                                </span>
-                                <button
-                                  className="revoke-button"
-                                  onClick={() => handleRevokeAccess(client.id, share.advisor_id)}
-                                >
-                                  Revoke
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        <div className="client-status">
+                          {client.hasCompletedSetup ? (
+                            <span className="status-badge status-completed">Account Set Up</span>
+                          ) : (
+                            <span className="status-badge status-pending-setup">Pending Setup</span>
+                          )}
+                        </div>
                       </div>
-                    )
-                  })}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
